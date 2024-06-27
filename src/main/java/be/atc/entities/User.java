@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
+// Test de commentaire dans la table Address
 @Entity
 @Table(name = "users")
 public class User {
