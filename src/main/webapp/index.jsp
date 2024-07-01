@@ -1,13 +1,17 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <%@ include file="WEB-INF/jsp/head.jsp" %>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<%@ include file="WEB-INF/jsp/navbar.jsp" %>
+
+<div class="container mt-4">
+    <h1>Gestion centre sportif</h1>
+    <p>2024</p>
+</div>
 </body>
 </html>
+
