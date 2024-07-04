@@ -25,6 +25,9 @@ public class MainServlet extends HttpServlet {
             case "dashboard":
                 request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
                 break;
+            case "home":
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                break;
             default:
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;

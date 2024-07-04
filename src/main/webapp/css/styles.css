@@ -1,0 +1,65 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.site-footer {
+    width: 100%;
+    background-color: #f8f9fa;
+    padding-top: 0.5rem; /* Réduire le padding en haut */
+    font-size: 0.875rem; /* Réduire la taille de la police */
+}
+
+.site-footer .container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.site-footer .row {
+    margin: 0;
+}
+
+.site-footer .col-md-6 {
+    padding: 5px 10px; /* Réduire le padding des colonnes */
+}
+
+.site-footer .text-center {
+    width: 100%;
+    background-color: #6c757d; /* Couleur de fond du footer */
+    color: #fff; /* Couleur du texte */
+}
+
+.site-footer .text-center .p-3 {
+    padding: 0.2rem;
+}
+
+.site-footer .col-md-6 {
+    background-color: #e9ecef; /* Change la couleur de fond de la première section */
+}
+
+.site-footer .btn {
+    padding: 0.25rem 0.5rem; /* Réduire le padding des boutons */
+    font-size: 0.75rem; /* Réduire la taille de la police des boutons */
+}
+
+.site-footer h5 {
+    margin-bottom: 0.5rem; /* Réduire la marge en bas des titres */
+}
+
+.site-footer p {
+    margin-bottom: 0.5rem; /* Réduire la marge en bas des paragraphes */
+}
