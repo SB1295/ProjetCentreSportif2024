@@ -63,3 +63,7 @@ html, body {
 .site-footer p {
     margin-bottom: 0.5rem; /* Réduire la marge en bas des paragraphes */
 }
+.large-image {
+    width: 300px; /* Ajustez la taille selon vos besoins */
+    height: 300px;
+}

@@ -9,7 +9,10 @@
 <div class="page-wrapper">
     <main class="site-content">
         <div class="container mt-4 content text-center">
-            <h1>Projet Gestion Centre Sportif</h1>
+            <div class="d-flex align-items-center justify-content-center">
+                <img src="images/mascotteGCS.png" alt="Logo" class="mr-3 large-image">
+                <h1>Gestion Centre Sportif</h1>
+            </div>
         </div>
         <!-- Présentation du centre -->
         <div class="container mt-5">
