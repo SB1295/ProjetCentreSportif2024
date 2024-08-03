@@ -12,7 +12,7 @@
             <div class="col-md-6">
                 <h5 class="text-uppercase">Centre Sportif ATC</h5>
                 <p>Grand'Rue 185, 6000 Charleroi, Belgique</p>
-                <p>Email: contact@atcsportif.fr | Telephone : +32 1 23 45 67 89</p>
+                <p>Email: contact@atcsportif.be | Telephone : +32 1 23 45 67 89</p>
             </div>
             <div class="col-md-6 text-md-right">
                 <h5 class="text-uppercase">Suivez-nous</h5>
