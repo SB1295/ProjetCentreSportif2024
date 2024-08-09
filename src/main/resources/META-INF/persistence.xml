@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
-    <persistence-unit name="default">
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
 
+    <persistence-unit name="projetCentreSportifPU" transaction-type="RESOURCE_LOCAL">
+
+        <!-- EclipseLink fournisseur JPA -->
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <!-- Liste des classes d'entités -->
+        <class>be.atc.entities.Address</class>
+        <class>be.atc.entities.Close</class>
+        <class>be.atc.entities.Country</class>
+        <class>be.atc.entities.Discount</class>
+        <class>be.atc.entities.Field</class>
+        <class>be.atc.entities.Hall</class>
+        <class>be.atc.entities.Locality</class>
+        <class>be.atc.entities.Order</class>
+        <class>be.atc.entities.OrdersDiscount</class>
+        <class>be.atc.entities.OrdersSubscription</class>
+        <class>be.atc.entities.Reservation</class>
+        <class>be.atc.entities.Role</class>
+        <class>be.atc.entities.Sport</class>
+        <class>be.atc.entities.SportField</class>
+        <class>be.atc.entities.Subscription</class>
+        <class>be.atc.entities.TimeSlot</class>
+        <class>be.atc.entities.User</class>
+        <class>be.atc.entities.UsersSubscription</class>
+
+        <properties>
+            <!-- Propriétés de connexion à la DB -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/centresportif2024"/>
+            <property name="jakarta.persistence.jdbc.user" value="root"/> <!-- utilisateur MySQL -->
+            <property name="jakarta.persistence.jdbc.password" value=""/> <!-- Mot de passe MySQL -->
+
+            <!-- Options EclipseLink -->
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.ddl-generation" value="update-or-create-tables"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+            <property name="eclipselink.weaving" value="false"/>
+
+            <!-- Dialecte MySQL -->
+            <property name="eclipselink.target-database" value="MySQL"/>
+        </properties>
     </persistence-unit>
 </persistence>
+
+

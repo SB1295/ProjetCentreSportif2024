@@ -22,6 +22,14 @@
                 <div class="card-body">
                     <form action="main?action=register" method="post">
                         <div class="form-group">
+                            <label for="firstName">Prénom</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Entrez votre prénom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Nom</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Entrez votre nom" required>
+                        </div>
+                        <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre email" required>
                         </div>

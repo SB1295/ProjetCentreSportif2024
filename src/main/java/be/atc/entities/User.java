@@ -4,16 +4,24 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
-// Test de commentaire dans la table Address
+// Sofiân - Gestion des utilisateurs
 @Entity
 @Table(name = "users")
+@NamedQueries({
+        @NamedQuery(name = "User.findByEmail", query = "select u from User u where u.email = :email"),
+        @NamedQuery(name = "User.findAll", query = "select u from User u"),
+        @NamedQuery(name = "User.existsByEmail", query = "select (count(u) > 0) from User u where u.email = :email"),
+        @NamedQuery(name = "User.deleteByEmail", query = "delete from User u where u.email = :email"),
+
+})
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private int id;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
