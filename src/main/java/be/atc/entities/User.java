@@ -10,7 +10,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "User.findByEmail", query = "select u from User u where u.email = :email"),
         @NamedQuery(name = "User.findAll", query = "select u from User u"),
-        @NamedQuery(name = "User.existsByEmail", query = "select (count(u) > 0) from User u where u.email = :email"),
+        @NamedQuery(name = "User.existsByEmail", query = "select count(u) from User u where u.email = :email"),
         @NamedQuery(name = "User.deleteByEmail", query = "delete from User u where u.email = :email"),
 
 })
@@ -33,21 +33,21 @@ public class User {
     @Column(name = "last_name", nullable = false, length = 90)
     private String lastName;
 
-    @Column(name = "birthdate", nullable = false)
+    @Column(name = "birthdate", nullable = true)
     private LocalDate birthdate;
 
     @Lob
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender", nullable = true)
     private String gender;
 
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone", nullable = true, length = 20)
     private String phone;
 
     @Column(name = "blacklist", nullable = false)
     private boolean blacklist = false;
 
     @Column(name = "active", nullable = false)
-    private boolean active = false;
+    private boolean active = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_role_id")

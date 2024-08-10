@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
-             version="3.0">
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
 
     <persistence-unit name="projetCentreSportifPU" transaction-type="RESOURCE_LOCAL">
 
@@ -31,10 +31,10 @@
 
         <properties>
             <!-- Propriétés de connexion à la DB -->
-            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/centresportif2024"/>
-            <property name="jakarta.persistence.jdbc.user" value="root"/> <!-- utilisateur MySQL -->
-            <property name="jakarta.persistence.jdbc.password" value=""/> <!-- Mot de passe MySQL -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/centresportif2024"/>
+            <property name="javax.persistence.jdbc.user" value="root"/> <!-- utilisateur MySQL -->
+            <property name="javax.persistence.jdbc.password" value=""/> <!-- Mot de passe MySQL -->
 
             <!-- Options EclipseLink -->
             <property name="eclipselink.logging.level" value="FINE"/>
@@ -47,5 +47,3 @@
         </properties>
     </persistence-unit>
 </persistence>
-
-

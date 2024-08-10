@@ -20,13 +20,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user, String confirmPassword) {
+        // Validation de l'email
+        if (!isValidEmail(user.getEmail())) {
+            throw new IllegalArgumentException("INVALID_EMAIL_FORMAT");
+        }
         // Vérifier si les mots de passe correspondent
         if (!user.getPassword().equals(confirmPassword)) {
-            throw new IllegalArgumentException("Les mots de passe ne correspondent pas.");
+            throw new IllegalArgumentException("PASSWORDS_DO_NOT_MATCH");
         }
         // Valider le mot de passe
         if (!isValidPassword(user.getPassword())) {
-            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 8 caractères, une majuscule, et un chiffre.");
+            throw new IllegalArgumentException("INVALID_PASSWORD_FORMAT");
         }
 
         // Hachage du mot de passe avec BCrypt
@@ -35,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
         // Logique métier : Vérifier si l'email existe déjà
         if (userDao.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("L'email est déjà utilisé.");
+            throw new IllegalArgumentException("EMAIL_ALREADY_EXISTS");
         } else {
             userDao.createUser(user);
         }
@@ -43,9 +47,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
+        // Validation de l'email
+        if (!isValidEmail(user.getEmail())) {
+            throw new IllegalArgumentException("INVALID_EMAIL_FORMAT");
+        }
+
         // Valider le mot de passe
         if (!isValidPassword(user.getPassword())) {
-            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 8 caractères, une majuscule, et un chiffre.");
+            throw new IllegalArgumentException("INVALID_PASSWORD_FORMAT");
         }
 
         // Hachage du mot de passe avec BCrypt
@@ -91,5 +100,12 @@ public class UserServiceImpl implements UserService {
     // Méthode pour vérifier un mot de passe avec son hash (utile pour la connexion)
     public boolean checkPassword(String plainPassword, String hashedPassword) {
         return BCrypt.checkpw(plainPassword, hashedPassword);
+    }
+
+    // Méthode pour valider l'email
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
     }
 }
