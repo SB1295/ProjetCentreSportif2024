@@ -37,7 +37,7 @@
             <property name="javax.persistence.jdbc.password" value=""/> <!-- Mot de passe MySQL -->
 
             <!-- Options EclipseLink -->
-            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.level" value="SEVERE"/>  <!-- INFO, FINE, WARNING, SEVERE. Valeurs pour la verbosité dans les logs-->
             <property name="eclipselink.ddl-generation" value="update-or-create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
             <property name="eclipselink.weaving" value="false"/>

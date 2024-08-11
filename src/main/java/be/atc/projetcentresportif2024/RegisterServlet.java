@@ -4,6 +4,8 @@ import be.atc.entities.User;
 import be.atc.services.UserService;
 import be.atc.services.impl.UserServiceImpl;
 import be.atc.dao.impl.UserDaoImpl;
+import org.apache.log4j.Logger;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,9 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserService userService;
+    // Initialisation du logger de RegisterServlet
+    private static final Logger logger = Logger.getLogger(RegisterServlet.class);
+
 
     @Override
     public void init() throws ServletException {
@@ -24,13 +29,13 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Accès à la page d'inscription (GET)");
+        logger.info("Accès à la page d'inscription (GET)");
         request.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Tentative d'inscription (POST)");
+        logger.info("Tentative d'inscription (POST)");
 
         // Suppression proactive de tous les attributs d'erreur pour éviter tout affichage accidentel
         request.removeAttribute("emailError");
@@ -46,7 +51,7 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             userService.createUser(user, confirmPassword);
-            System.out.println("Utilisateur créé avec succès, redirection vers la page de connexion.");
+            logger.info("Utilisateur créé avec succès, redirection vers la page de connexion.");
             response.sendRedirect("login");
 
         } catch (IllegalArgumentException e) {
@@ -67,9 +72,9 @@ public class RegisterServlet extends HttpServlet {
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
 
-        System.out.println("Email: " + email);
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
+        logger.debug("Email: " + email);
+        logger.debug("First Name: " + firstName);
+        logger.debug("Last Name: " + lastName);
 
         User user = new User();
         user.setEmail(email);
@@ -81,15 +86,12 @@ public class RegisterServlet extends HttpServlet {
     }
 
     private void handleRegistrationError(HttpServletRequest request, HttpServletResponse response, IllegalArgumentException e, User user) throws ServletException, IOException {
-        System.out.println("Erreur lors de l'inscription: " + e.getMessage());
+        logger.error("Erreur lors de l'inscription: " + e.getMessage());
 
         // Pré-remplir les champs avec les valeurs saisies
         request.setAttribute("email", user.getEmail());
         request.setAttribute("firstName", user.getFirstName());
         request.setAttribute("lastName", user.getLastName());
-
-        // Vérification message d'erreur exact
-        System.out.println("Message d'erreur capturé: " + e.getMessage());
 
         // Gérer les erreurs spécifiques avec un switch
         handleSpecificErrors(request, e.getMessage());
@@ -122,20 +124,20 @@ public class RegisterServlet extends HttpServlet {
                 if (errorCode != null) {
                     errorMessage = "Erreur inconnue. Veuillez réessayer.";
                     request.setAttribute("generalError", errorMessage);
-                    System.out.println("Erreur inconnue détectée : " + errorMessage);
+                    logger.error("Erreur inconnue détectée : " + errorMessage);
                 }
                 break;
         }
 
         if (errorMessage == null) {
-            System.out.println("Aucune erreur spécifique détectée, suppression de generalError.");
+            logger.debug("Aucune erreur spécifique détectée, suppression de generalError.");
             request.removeAttribute("generalError");
         }
-        System.out.println("Erreur détectée : " + errorCode + " avec le message : " + errorMessage);
+        logger.debug("Erreur détectée : " + errorCode + " avec le message : " + errorMessage);
     }
 
     private void handleUnexpectedError(HttpServletRequest request, HttpServletResponse response, Exception e) throws ServletException, IOException {
-        System.out.println("Erreur inattendue: " + e.getMessage());
+        logger.error("Erreur inattendue: " + e.getMessage());
         request.setAttribute("errorMessage", "Une erreur inattendue s'est produite. Veuillez réessayer.");
         request.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(request, response);
     }

@@ -3,6 +3,7 @@ package be.atc.dao.impl;
 import be.atc.dao.UserDao;
 import be.atc.entities.User;
 import be.atc.util.JpaUtil;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -11,6 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
+
+    // Logger
+    private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 
     @Override
     public void createUser(User user) {
@@ -21,11 +25,13 @@ public class UserDaoImpl implements UserDao {
             transaction.begin();
             em.persist(user);  // Persiste un nouvel utilisateur dans la base de données
             transaction.commit();
+            logger.info("Utilisateur créé avec succès : " + user.getEmail());
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();  // Annule la transaction en cas d'erreur
             }
-            e.printStackTrace();
+            logger.error("Erreur lors de la création de l'utilisateur : " + user.getEmail(), e);
+            throw e;
         } finally {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
@@ -40,11 +46,13 @@ public class UserDaoImpl implements UserDao {
             transaction.begin();
             em.merge(user);  // Met à jour un utilisateur existant
             transaction.commit();
+            logger.info("Utilisateur mis à jour avec succès : " + user.getEmail());
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();  // Annule la transaction en cas d'erreur
             }
-            e.printStackTrace();
+            logger.error("Erreur lors de la mise à jour de l'utilisateur : " + user.getEmail(), e);
+            throw e;
         } finally {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
@@ -57,8 +65,10 @@ public class UserDaoImpl implements UserDao {
             User user = em.createNamedQuery("User.findByEmail", User.class)
                     .setParameter("email", email)
                     .getSingleResult();
+            logger.debug("Utilisateur trouvé avec l'email : " + email);
             return Optional.of(user);
         } catch (NoResultException e) {
+            logger.warn("Aucun utilisateur trouvé avec l'email : " + email);
             return Optional.empty();
         } finally {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
@@ -69,7 +79,12 @@ public class UserDaoImpl implements UserDao {
     public List<User> findAll() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            return em.createNamedQuery("User.findAll", User.class).getResultList();
+            List<User> users = em.createNamedQuery("User.findAll", User.class).getResultList();
+            logger.debug("Tous les utilisateurs récupérés");
+            return users;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la récupération des utilisateurs", e);
+            throw e;
         } finally {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
@@ -82,7 +97,11 @@ public class UserDaoImpl implements UserDao {
             Long count = em.createNamedQuery("User.existsByEmail", Long.class)
                     .setParameter("email", email)
                     .getSingleResult();
+            logger.debug("Vérification de l'existence de l'email : " + email);
             return count > 0;
+        } catch (Exception e) {
+            logger.error("Erreur lors de la vérification de l'existence de l'email : " + email, e);
+            throw e;
         } finally {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
@@ -98,11 +117,13 @@ public class UserDaoImpl implements UserDao {
             Optional<User> userOpt = findByEmail(email);
             userOpt.ifPresent(em::remove);
             transaction.commit();
+            logger.info("Utilisateur supprimé avec succès : " + email);
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();  // Annule la transaction en cas d'erreur
             }
-            e.printStackTrace();
+            logger.error("Erreur lors de la suppression de l'utilisateur : " + email, e);
+            throw e;
         } finally {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
