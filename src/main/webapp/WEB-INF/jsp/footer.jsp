@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="text-center p-3 bg-secondary text-white">
-            &copy; 2024 Centre Sportif ATC. Tous droits reserves.
+            &copy; 2024 Centre Sportif ATC. Tous droits réservés.
         </div>
     </div>
 </footer>

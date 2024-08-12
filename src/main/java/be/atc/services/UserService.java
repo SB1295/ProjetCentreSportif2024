@@ -25,5 +25,8 @@ public interface UserService {
     // Supprimer un utilisateur par email
     void deleteByEmail(String email);
 
+    // Authentification de l'utilisateur
+    User authenticateUser(String email, String password);
+
 }
 

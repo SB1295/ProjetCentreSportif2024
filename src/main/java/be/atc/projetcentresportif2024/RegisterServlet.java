@@ -3,7 +3,6 @@ package be.atc.projetcentresportif2024;
 import be.atc.entities.User;
 import be.atc.services.UserService;
 import be.atc.services.impl.UserServiceImpl;
-import be.atc.dao.impl.UserDaoImpl;
 import org.apache.log4j.Logger;
 
 
@@ -18,13 +17,12 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserService userService;
-    // Initialisation du logger de RegisterServlet
     private static final Logger logger = Logger.getLogger(RegisterServlet.class);
-
 
     @Override
     public void init() throws ServletException {
-        userService = new UserServiceImpl(new UserDaoImpl());
+        logger.info("Initialisation de RegisterServlet");
+        userService = new UserServiceImpl(); // Initialisation directe de UserServiceImpl sans passer un DAO
     }
 
     @Override
@@ -52,7 +50,8 @@ public class RegisterServlet extends HttpServlet {
         try {
             userService.createUser(user, confirmPassword);
             logger.info("Utilisateur créé avec succès, redirection vers la page de connexion.");
-            response.sendRedirect("login");
+            // Redirection vers la MainServlet avec l'action "login"
+            response.sendRedirect(request.getContextPath() + "/main?action=login");
 
         } catch (IllegalArgumentException e) {
             handleRegistrationError(request, response, e, user);
@@ -88,7 +87,7 @@ public class RegisterServlet extends HttpServlet {
     private void handleRegistrationError(HttpServletRequest request, HttpServletResponse response, IllegalArgumentException e, User user) throws ServletException, IOException {
         logger.error("Erreur lors de l'inscription: " + e.getMessage());
 
-        // Pré-remplir les champs avec les valeurs saisies
+        // Préremplir les champs avec les valeurs saisies
         request.setAttribute("email", user.getEmail());
         request.setAttribute("firstName", user.getFirstName());
         request.setAttribute("lastName", user.getLastName());

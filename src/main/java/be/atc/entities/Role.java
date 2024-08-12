@@ -6,6 +6,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@NamedQueries({
+        @NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.id = :id"),
+        @NamedQuery(name = "Role.findByName", query = "SELECT r FROM Role r WHERE r.roleName = :roleName"),
+        @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r") // NamedQuery pour findAll
+
+})
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

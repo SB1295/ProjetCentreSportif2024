@@ -1,7 +1,12 @@
 package be.atc.services.impl;
 
-import be.atc.dao.UserDao;
+
 import be.atc.entities.User;
+import be.atc.entities.Role; // Permet dans createUser de créer une instance de l'objet role pour définir le rôle par défaut d'un nouvel utilisateur
+
+import be.atc.dao.UserDao;
+import be.atc.dao.impl.UserDaoImpl;
+
 import be.atc.services.UserService;
 import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -10,15 +15,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+
 public class UserServiceImpl implements UserService {
 
     // Initialisation du logger de UserServiceImpl
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
     private final UserDao userDao;
 
-    // Injection du DAO via le constructeur
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    // Initialisation du DAO directement dans le constructeur
+    public UserServiceImpl() {
+        this.userDao = new UserDaoImpl();  // Ici, vous initialisez directement le UserDaoImpl
     }
 
     @Override
@@ -52,11 +58,25 @@ public class UserServiceImpl implements UserService {
         if (userDao.existsByEmail(user.getEmail())) {
             logger.error("L'email existe déjà dans la base de données : " + user.getEmail());
             throw new IllegalArgumentException("EMAIL_ALREADY_EXISTS");
-        } else {
-            userDao.createUser(user);
-            logger.info("Utilisateur créé avec succès : " + user.getEmail());
         }
+
+        // Attribuer un rôle par défaut si aucun rôle n'est défini
+        if (user.getFkRole() == null) {
+            logger.info("Aucun rôle défini pour l'utilisateur, attribution du rôle par défaut 'USER'");
+
+            // Créer un objet Role avec l'ID 1 pour le rôle 'USER'
+            Role defaultRole = new Role();
+            defaultRole.setId(1); // Supposons que le rôle 'USER' ait l'ID 1
+
+            // Attribuer ce rôle à l'utilisateur
+            user.setFkRole(defaultRole);
+        }
+
+        // Sauvegarder l'utilisateur dans la base de données
+        userDao.createUser(user);
+        logger.info("Utilisateur créé avec succès : " + user.getEmail());
     }
+
 
     @Override
     public void updateUser(User user) {
@@ -145,4 +165,31 @@ public class UserServiceImpl implements UserService {
         logger.debug("Validation de l'email : " + email + " - Valide : " + isValid);
         return isValid;
     }
+
+    @Override
+    public User authenticateUser(String email, String password) {
+        logger.info("Tentative d'authentification pour l'utilisateur avec l'email : " + email);
+
+        // Recherche de l'utilisateur par email. Utilisation de Optional pour gérer l'absence de valeur et éviter l'erreur 'NullPointerException'
+        // findByEmail retourne un Optional<User>, l'attribution est donc logique dans une nouvelle variable Optional<User>
+        Optional<User> userOptional = userDao.findByEmail(email);
+
+        // Vérification de l'utilisateur et du mot de passe
+        // isPresent est une méthode de Optional pour vérifier si une valeur est présente. Renvoie True / False
+        if (userOptional.isPresent()) {
+            User user = userOptional.get(); // get() Méthode de Optional qui retourne la valeur contenue dans Optional
+            if (checkPassword(password, user.getPassword())) {
+                logger.info("Authentification réussie pour l'utilisateur avec l'email : " + email);
+                return user;
+            } else {
+                logger.warn("Échec de l'authentification : mot de passe incorrect pour l'email : " + email);
+            }
+        } else {
+            logger.warn("Échec de l'authentification : aucun utilisateur trouvé avec l'email : " + email);
+        }
+
+        // Retourne null si l'authentification échoue
+        return null;
+    }
+
 }

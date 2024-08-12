@@ -20,7 +20,7 @@
                     <h3>Connexion</h3>
                 </div>
                 <div class="card-body">
-                    <form action="main?action=login" method="post">
+                    <form action="LoginServlet" method="post">
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre email" required>
