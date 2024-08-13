@@ -18,14 +18,27 @@
         <ul class="navbar-nav">
             <c:choose>
                 <c:when test="${not empty sessionScope.user}">
-                    <!-- Si l'utilisateur est connecté, afficher le nom et le bouton de déconnexion -->
+                    <!-- Si l'utilisateur est connecté, afficher le nom, le bouton de déconnexion, le tableau de bord et le panneau d'administration si c'est un admin -->
                     <li class="nav-item">
                         <span class="navbar-text mr-3">
                             Bienvenue, ${sessionScope.user.firstName} ${sessionScope.user.lastName}
                         </span>
                     </li>
+                    <!-- Bouton "Tableau de bord" visible pour tous les utilisateurs connectés -->
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-outline-danger my-2 my-sm-0">Se déconnecter</a>
+                        <a href="${pageContext.request.contextPath}/ProfileServlet" class="btn btn-outline-info my-2 my-sm-0 ml-2">Gérer Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/DashboardServlet" class="btn btn-outline-secondary my-2 my-sm-0 ml-2">Tableau de bord</a>
+                    </li>
+                    <!-- Bouton pour le panneau d'administration, visible uniquement pour les admins -->
+                    <c:if test="${sessionScope.user.fkRole.id == 3}">
+                        <li class="nav-item">
+                            <a href="${pageContext.request.contextPath}/AdminPanelServlet" class="btn btn-outline-warning my-2 my-sm-0 ml-2">Panneau d'administration</a>
+                        </li>
+                    </c:if>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/LogoutServlet" class="btn btn-outline-danger my-2 my-sm-0 ml-2">Se déconnecter</a>
                     </li>
                 </c:when>
                 <c:otherwise>

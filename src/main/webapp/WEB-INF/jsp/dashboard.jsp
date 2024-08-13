@@ -21,7 +21,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    Section 1
+                    Abonnements actifs
                 </div>
                 <div class="card-body">
                     <p>Contenu pour la première section du tableau de bord.</p>
@@ -31,37 +31,10 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    Section 2
+                    Réservations
                 </div>
                 <div class="card-body">
                     <p>Contenu pour la deuxième section du tableau de bord.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    Section 3
-                </div>
-                <div class="card-body">
-                    <p>Contenu pour la troisième section du tableau de bord.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    Informations complémentaires
-                </div>
-                <div class="card-body">
-                    <p>Des informations supplémentaires ou des graphiques peuvent être placés ici.</p>
-                    <!-- Par exemple, vous pouvez afficher un lien vers le panneau d'administration si l'utilisateur est un admin -->
-                    <c:if test="${user.fkRole.id == 3}">
-                        <a href="${pageContext.request.contextPath}/adminPanel" class="btn btn-primary">Panneau d'administration</a>
-                    </c:if>
                 </div>
             </div>
         </div>
