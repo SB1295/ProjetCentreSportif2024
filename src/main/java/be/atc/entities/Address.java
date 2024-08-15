@@ -6,7 +6,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = "addresses")
-
+@NamedQueries({
+        @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a"),
+        @NamedQuery(name = "Address.findById", query = "SELECT a FROM Address a WHERE a.id = :id"),
+        @NamedQuery(name = "Address.findByStreetName", query = "SELECT a FROM Address a WHERE a.streetName = :streetName"),
+        @NamedQuery(name = "Address.findByLocalityId", query = "SELECT a FROM Address a WHERE a.fkLocality.id = :localityId")
+})
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

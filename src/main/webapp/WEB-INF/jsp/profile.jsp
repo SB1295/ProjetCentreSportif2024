@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <!-- Import JSTL -->
 <!DOCTYPE html>
 <html>
 <%@ include file="/WEB-INF/jsp/head.jsp" %> <!-- Inclusion du head commun -->
@@ -96,19 +97,19 @@
           <input type="date" class="form-control" id="birthdate" name="birthdate" value="${sessionScope.user.birthdate}">
         </div>
       </div>
-    <!-- Champs supplémentaires visibles uniquement pour les admins -->
-    <c:if test="${sessionScope.user.fkRole.id == 3}">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="fkRole">Rôle</label>
-          <select class="form-control" id="fkRole" name="fkRole">
-            <option value="1" ${sessionScope.user.fkRole.id == 1 ? 'selected' : ''}>Utilisateur</option>
-            <option value="2" ${sessionScope.user.fkRole.id == 2 ? 'selected' : ''}>Organisateur</option>
-            <option value="3" ${sessionScope.user.fkRole.id == 3 ? 'selected' : ''}>Administrateur</option>
-          </select>
+      <!-- Champs supplémentaires visibles uniquement pour les admins -->
+      <c:if test="${sessionScope.user.fkRole.id == 3}">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="fkRole">Rôle</label>
+            <select class="form-control" id="fkRole" name="fkRole">
+              <option value="1" ${sessionScope.user.fkRole.id == 1 ? 'selected' : ''}>Utilisateur</option>
+              <option value="2" ${sessionScope.user.fkRole.id == 2 ? 'selected' : ''}>Organisateur</option>
+              <option value="3" ${sessionScope.user.fkRole.id == 3 ? 'selected' : ''}>Administrateur</option>
+            </select>
+          </div>
         </div>
-      </div>
-    </c:if>
+      </c:if>
     </div>
 
     <!-- Champs supplémentaires visibles uniquement pour les admins -->
@@ -138,14 +139,14 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <label for="street">Rue</label>
-          <input type="text" class="form-control" id="street" name="street" value="${sessionScope.user.fkAddresse.street}" required>
+          <label for="streetName">Rue</label>
+          <input type="text" class="form-control" id="streetName" name="streetName" value="${sessionScope.user.fkAddresse.streetName}" required>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label for="city">Ville</label>
-          <input type="text" class="form-control" id="city" name="city" value="${sessionScope.user.fkAddresse.city}" required>
+          <label for="number">Numéro</label>
+          <input type="text" class="form-control" id="number" name="number" value="${sessionScope.user.fkAddresse.number}" required>
         </div>
       </div>
     </div>
@@ -153,14 +154,21 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <label for="postalCode">Code postal</label>
-          <input type="text" class="form-control" id="postalCode" name="postalCode" value="${sessionScope.user.fkAddresse.postalCode}" required>
+          <label for="boxNumber">Boîte</label>
+          <input type="text" class="form-control" id="boxNumber" name="boxNumber" value="${sessionScope.user.fkAddresse.boxNumber}">
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label for="country">Pays</label>
-          <input type="text" class="form-control" id="country" name="country" value="${sessionScope.user.fkAddresse.country}" required>
+          <label for="locality">Localité</label>
+          <select class="form-control locality-select" id="locality" name="locality" required>
+            <option value="" disabled selected>Choisir une localité</option>
+            <c:forEach var="locality" items="${localities}">
+              <option value="${locality.id}" ${sessionScope.user.fkAddresse.fkLocality.id == locality.id ? 'selected' : ''}>
+                  ${locality.postalCode} - ${locality.town} (${locality.province})
+              </option>
+            </c:forEach>
+          </select>
         </div>
       </div>
     </div>
@@ -169,5 +177,11 @@
   </form>
 </div>
 
+<!-- Script pour activer Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/profile.js"></script>
+
 </body>
 </html>
+
