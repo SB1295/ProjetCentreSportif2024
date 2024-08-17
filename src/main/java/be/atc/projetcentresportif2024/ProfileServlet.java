@@ -39,9 +39,9 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
-        // Rediriger l'utilisateur vers la page de profil
-        logger.info("Utilisateur trouvé dans la session, redirection vers profile.jsp");
-        request.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(request, response);
+        // Redirection vers AddressServlet pour charger les localités et afficher la page de profil
+        logger.info("Redirection vers AddressServlet pour charger les localités");
+        response.sendRedirect(request.getContextPath() + "/AddressServlet");
     }
 
     @Override
@@ -95,8 +95,11 @@ public class ProfileServlet extends HttpServlet {
             // Mise à jour de l'objet User dans la session après modification
             session.setAttribute("user", updatedUser);
 
-            request.setAttribute("successMessage", "Profil mis à jour avec succès.");
-            request.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(request, response);
+            // Stocker le message de succès dans la session
+            session.setAttribute("successMessage", "Profil mis à jour avec succès.");
+
+            // Redirection vers AddressServlet pour charger les localités et afficher la page de profil
+            response.sendRedirect(request.getContextPath() + "/AddressServlet");
 
         } catch (IllegalArgumentException e) {
             handleUserUpdateError(request, response, e.getMessage());
@@ -148,8 +151,12 @@ public class ProfileServlet extends HttpServlet {
         }
 
         logger.error("Erreur lors de la mise à jour du profil : " + errorMessage);
-        request.setAttribute("errorMessage", errorMessage);
-        request.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(request, response);
+        // Stocker le message d'erreur dans la session
+        HttpSession session = request.getSession();
+        session.setAttribute("errorMessage", errorMessage);
+
+        // Redirection vers AddressServlet pour recharger les localités
+        response.sendRedirect(request.getContextPath() + "/AddressServlet");
     }
 
 }

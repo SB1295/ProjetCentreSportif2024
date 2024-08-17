@@ -133,10 +133,11 @@
     <button type="submit" class="btn btn-outline-info">Mettre à jour</button>
   </form>
 
+
   <!-- Formulaire séparé pour l'adresse -->
   <h2 class="mt-5">Modifier l'adresse</h2>
-  <form action="${pageContext.request.contextPath}/AddressServlet" method="post">
-    <div class="row">
+  <form action="AddressServlet" method="post">
+    <div class="row mb-5">
       <div class="col-md-6">
         <div class="form-group">
           <label for="streetName">Rue</label>
@@ -173,8 +174,30 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="town">Ville</label>
+          <input type="text" class="form-control" id="town" name="town" value="${sessionScope.user.fkAddresse.fkLocality.town}" disabled>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="province">Province</label>
+          <input type="text" class="form-control" id="province" name="province" value="${sessionScope.user.fkAddresse.fkLocality.province}" disabled>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="maintown">Ville Principale</label>
+          <input type="text" class="form-control" id="maintown" name="maintown" value="${sessionScope.user.fkAddresse.fkLocality.maintown}" disabled>
+        </div>
+      </div>
+    </div>
+
     <button type="submit" class="btn btn-outline-info">Mettre à jour l'adresse</button>
   </form>
+
 </div>
 
 <!-- Script pour activer Select2 -->

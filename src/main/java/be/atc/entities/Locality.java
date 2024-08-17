@@ -6,6 +6,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "localities")
+@NamedQueries({
+        @NamedQuery(name = "Locality.findAll", query = "SELECT l FROM Locality l"),
+        @NamedQuery(name = "Locality.findById", query = "SELECT l FROM Locality l WHERE l.id = :id"),
+        @NamedQuery(name = "Locality.findByPostalCode", query = "SELECT l FROM Locality l WHERE l.postalCode = :postalCode"),
+        @NamedQuery(name = "Locality.findByTown", query = "SELECT l FROM Locality l WHERE l.town = :town"),
+        @NamedQuery(name = "Locality.findByProvince", query = "SELECT l FROM Locality l WHERE l.province = :province"),
+        @NamedQuery(name = "Locality.findByCountry", query = "SELECT l FROM Locality l WHERE l.fkCountry.id = :countryId")
+})
 public class Locality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

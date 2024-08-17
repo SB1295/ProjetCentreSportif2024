@@ -25,6 +25,8 @@ public class AddressDaoImpl implements AddressDao {
             transaction.begin();
             em.persist(address);
             transaction.commit();
+            // Logger vérification Id de l'adresse générée
+            logger.info("Adresse persistée avec succès, ID généré : " + address.getId());
             logger.info("Adresse créée avec succès : " + address.getStreetName());
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {

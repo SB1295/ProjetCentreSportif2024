@@ -27,10 +27,9 @@ public class Address {
     @Column(name = "box_number", length = 11)
     private String boxNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "fk_locality_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "fk_locality_id", nullable = true)
     private Locality fkLocality;
-
     @OneToMany(mappedBy = "fkAddresse")
     private Set<User> users = new LinkedHashSet<>();
 
