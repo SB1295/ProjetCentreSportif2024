@@ -12,7 +12,7 @@ import java.util.Set;
         @NamedQuery(name = "User.findAll", query = "select u from User u"),
         @NamedQuery(name = "User.existsByEmail", query = "select count(u) from User u where u.email = :email"),
         @NamedQuery(name = "User.deleteByEmail", query = "delete from User u where u.email = :email"),
-
+        @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id")
 })
 
 public class User {

@@ -12,13 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import org.apache.log4j.Logger;
+import java.util.Optional;
 
 @WebServlet(name = "ProfileServlet", value = "/ProfileServlet")
 public class ProfileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    // Initialisation du logger pour le suivi des événements
     private static final Logger logger = Logger.getLogger(ProfileServlet.class);
+    private final UserService userService;
+
+    public ProfileServlet() {
+        this.userService = new UserServiceImpl();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,26 +36,51 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+        // Récupération de l'utilisateur connecté
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
             logger.warn("Utilisateur non trouvé dans la session, redirection vers la page de connexion");
             response.sendRedirect(request.getContextPath() + "/main?action=login");
             return;
         }
 
+        // Vérification de l'utilisateur dont le profil doit être édité
+        String userIdStr = request.getParameter("userId");
+        User userToEdit = currentUser; // Par défaut, l'utilisateur connecté
+
+        if (userIdStr != null) {
+            try {
+                int userId = Integer.parseInt(userIdStr);
+                Optional<User> userOptional = userService.findById(userId);
+                if (userOptional.isPresent()) {
+                    userToEdit = userOptional.get();
+                } else {
+                    logger.warn("Utilisateur avec l'ID " + userId + " non trouvé.");
+                    session.setAttribute("errorMessage", "Utilisateur non trouvé.");
+                    response.sendRedirect(request.getContextPath() + "/AdminPanelServlet");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                logger.error("ID utilisateur invalide: " + userIdStr);
+                session.setAttribute("errorMessage", "ID utilisateur invalide.");
+                response.sendRedirect(request.getContextPath() + "/AdminPanelServlet");
+                return;
+            }
+        }
+
+        // Stocker l'utilisateur à modifier dans la session sous l'attribut 'currentEditUser'
+        session.setAttribute("currentEditUser", userToEdit);
+
         // Redirection vers AddressServlet pour charger les localités et afficher la page de profil
-        logger.info("Redirection vers AddressServlet pour charger les localités");
         response.sendRedirect(request.getContextPath() + "/AddressServlet");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Défini l'encodage pour les requêtes et réponses en UFT-8
         setRequestEncoding(request, response);
 
         logger.info("Entrée dans doPost de ProfileServlet");
 
-        // Vérification de la session
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             logger.warn("Aucune session valide, redirection vers la page de connexion");
@@ -59,14 +88,14 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            logger.warn("Utilisateur non trouvé dans la session, redirection vers la page de connexion");
+        // Récupération de l'utilisateur à modifier (soit l'utilisateur connecté, soit un autre utilisateur)
+        User userToEdit = (User) session.getAttribute("currentEditUser");
+        if (userToEdit == null) {
+            logger.warn("Utilisateur non trouvé pour la modification, redirection vers la page de connexion");
             response.sendRedirect(request.getContextPath() + "/main?action=login");
             return;
         }
 
-        // Récupération des données du formulaire
         String newEmail = request.getParameter("email");
         String confirmEmail = request.getParameter("confirmEmail");
         String newPassword = request.getParameter("password");
@@ -76,87 +105,51 @@ public class ProfileServlet extends HttpServlet {
         String birthdate = request.getParameter("birthdate");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
-
-        // Champs spécifiques à l'administration
         String blacklist = request.getParameter("blacklist");
         String active = request.getParameter("active");
         String fkRole = request.getParameter("fkRole");
 
-        // Déterminer si l'utilisateur est un administrateur
-        boolean isAdmin = user.getFkRole().getId() == 3;
+        boolean isAdmin = ((User) session.getAttribute("user")).getFkRole().getId() == 3;
 
         try {
-            UserService userService = new UserServiceImpl();
-            User updatedUser = userService.validateAndPrepareUserForUpdate(user, newEmail, confirmEmail, newPassword, confirmPassword, phone, gender, birthdate, firstName, lastName, blacklist, active, fkRole, isAdmin);
-
-            // Appel de la méthode updateUser pour sauvegarder les modifications
+            User updatedUser = userService.validateAndPrepareUserForUpdate(userToEdit, newEmail, confirmEmail, newPassword, confirmPassword, phone, gender, birthdate, firstName, lastName, blacklist, active, fkRole, isAdmin);
             userService.updateUser(updatedUser);
 
-            // Mise à jour de l'objet User dans la session après modification
-            session.setAttribute("user", updatedUser);
-
-            // Stocker le message de succès dans la session
+            session.setAttribute("currentEditUser", updatedUser);
             session.setAttribute("successMessage", "Profil mis à jour avec succès.");
 
-            // Redirection vers AddressServlet pour charger les localités et afficher la page de profil
             response.sendRedirect(request.getContextPath() + "/AddressServlet");
 
         } catch (IllegalArgumentException e) {
             handleUserUpdateError(request, response, e.getMessage());
         }
     }
+
     private void setRequestEncoding(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
     }
 
-    private void handleUserUpdateError(HttpServletRequest request, HttpServletResponse response, String errorCode) throws ServletException, IOException {
+    private void handleUserUpdateError(HttpServletRequest request, HttpServletResponse response, String errorCode) throws IOException {
         String errorMessage;
         switch (errorCode) {
-            case "INVALID_FIRST_NAME":
-                errorMessage = "Le prénom est invalide.";
-                break;
-            case "INVALID_LAST_NAME":
-                errorMessage = "Le nom de famille est invalide.";
-                break;
-            case "INVALID_EMAIL_FORMAT":
-                errorMessage = "Le format de l'email est invalide.";
-                break;
-            case "PASSWORDS_DO_NOT_MATCH":
-                errorMessage = "Les mots de passe ne correspondent pas.";
-                break;
-            case "INVALID_PASSWORD_FORMAT":
-                errorMessage = "Le format du mot de passe est invalide.";
-                break;
-            case "INVALID_PHONE_NUMBER":
-                errorMessage = "Le numéro de téléphone est invalide.";
-                break;
-            case "INVALID_GENDER":
-                errorMessage = "Le genre est invalide.";
-                break;
-            case "INVALID_BIRTHDATE":
-                errorMessage = "La date de naissance est invalide.";
-                break;
-            case "EMAIL_ALREADY_EXISTS":
-                errorMessage = "Cet email est déjà utilisé.";
-                break;
-            case "EMAILS_DO_NOT_MATCH":
-                errorMessage = "Les emails ne correspondent pas.";
-                break;
-            case "INVALID_ROLE":
-                errorMessage = "Le rôle sélectionné est invalide.";
-                break;
-            default:
-                errorMessage = "Une erreur est survenue lors de la mise à jour du profil.";
+            case "INVALID_FIRST_NAME": errorMessage = "Le prénom est invalide."; break;
+            case "INVALID_LAST_NAME": errorMessage = "Le nom de famille est invalide."; break;
+            case "INVALID_EMAIL_FORMAT": errorMessage = "Le format de l'email est invalide."; break;
+            case "PASSWORDS_DO_NOT_MATCH": errorMessage = "Les mots de passe ne correspondent pas."; break;
+            case "INVALID_PASSWORD_FORMAT": errorMessage = "Le format du mot de passe est invalide."; break;
+            case "INVALID_PHONE_NUMBER": errorMessage = "Le numéro de téléphone est invalide."; break;
+            case "INVALID_GENDER": errorMessage = "Le genre est invalide."; break;
+            case "INVALID_BIRTHDATE": errorMessage = "La date de naissance est invalide."; break;
+            case "EMAIL_ALREADY_EXISTS": errorMessage = "Cet email est déjà utilisé."; break;
+            case "EMAILS_DO_NOT_MATCH": errorMessage = "Les emails ne correspondent pas."; break;
+            case "INVALID_ROLE": errorMessage = "Le rôle sélectionné est invalide."; break;
+            default: errorMessage = "Une erreur est survenue lors de la mise à jour du profil.";
         }
 
         logger.error("Erreur lors de la mise à jour du profil : " + errorMessage);
-        // Stocker le message d'erreur dans la session
         HttpSession session = request.getSession();
         session.setAttribute("errorMessage", errorMessage);
-
-        // Redirection vers AddressServlet pour recharger les localités
         response.sendRedirect(request.getContextPath() + "/AddressServlet");
     }
-
 }

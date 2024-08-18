@@ -128,4 +128,51 @@ public class UserDaoImpl implements UserDao {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
     }
+    @Override
+    public Optional<User> findById(int id) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            User user = em.createNamedQuery("User.findById", User.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+            logger.debug("Utilisateur trouvé avec l'ID : " + id);
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            logger.warn("Aucun utilisateur trouvé avec l'ID : " + id);
+            return Optional.empty();
+        } finally {
+            em.close();  // Ferme l'EntityManager pour libérer les ressources
+        }
+    }
+
+    @Override
+    public void deleteById(int id) {
+        EntityManager em = JpaUtil.getEntityManager();
+        EntityTransaction transaction = null;
+        try {
+            transaction = em.getTransaction();
+            transaction.begin();
+
+            // Récupération de l'utilisateur par ID
+            Optional<User> userOpt = findById(id);
+            if (userOpt.isPresent()) {
+                User managedUser = em.merge(userOpt.get()); // Rattachement de l'entité détachée à l'EntityManager
+                em.remove(managedUser); // Suppression de l'utilisateur géré
+                logger.info("Utilisateur supprimé avec succès : " + managedUser.getEmail());
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();  // Annule la transaction en cas d'erreur
+            }
+            logger.error("Erreur lors de la suppression de l'utilisateur avec ID : " + id, e);
+            throw e;
+        } finally {
+            em.close();  // Ferme l'EntityManager pour libérer les ressources
+        }
+    }
+
+
+
 }

@@ -15,26 +15,28 @@
 <div class="container mt-4">
     <h1>Tableau de Bord</h1>
 
-    <p>Bienvenue, <strong>${user.firstName} ${user.lastName}</strong>!</p> <!-- Affiche le nom de l'utilisateur connecté -->
+    <!-- Affiche le nom de l'utilisateur connecté :
+     <p>Bienvenue, <strong>${user.firstName} ${user.lastName}</strong>!</p>
+     -->
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     Abonnements actifs
                 </div>
                 <div class="card-body">
-                    <p>Contenu pour la première section du tableau de bord.</p>
+                    <p>Première section du tableau de bord. Affichage des abonnements actifs.</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     Réservations
                 </div>
                 <div class="card-body">
-                    <p>Contenu pour la deuxième section du tableau de bord.</p>
+                    <p>Deuxième section du tableau de bord. Affichage des réservations. </p>
                 </div>
             </div>
         </div>

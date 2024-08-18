@@ -30,7 +30,6 @@ public class AddressServlet extends HttpServlet {
 
     private final AddressService addressService;
     private final LocalityService localityService;
-    //
     private final UserService userService;
 
     public AddressServlet() {
@@ -116,12 +115,12 @@ public class AddressServlet extends HttpServlet {
         HttpSession session = validateSession(request, response);
         if (session == null) return;
 
-        User user = (User) session.getAttribute("user");
+        // Utilisation de currentEditUser au lieu de user
+        User user = (User) session.getAttribute("currentEditUser");
 
         try {
             updateUserAddress(request, user);
-            session.setAttribute("user", user);
-            // Stocker le message de succès dans la session
+            session.setAttribute("currentEditUser", user); // Mise à jour de currentEditUser après modification
             session.setAttribute("successMessage", "Adresse mise à jour avec succès.");
         } catch (Exception e) {
             handlePostError(request, response, e);

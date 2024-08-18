@@ -24,4 +24,11 @@ public interface UserDao {
     // Supprimer un utilisateur par email
     void deleteByEmail(String email);
 
+    // Supprimer un utilisateur par Id
+    void deleteById(int id);
+
+    // Trouver un utilisateur par son Id
+    Optional<User> findById(int id);
+
+
 }

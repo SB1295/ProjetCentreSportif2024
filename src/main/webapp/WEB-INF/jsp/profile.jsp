@@ -33,7 +33,7 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="email">Adresse e-mail</label>
-          <input type="email" class="form-control" id="email" name="email" value="${sessionScope.user.email}">
+          <input type="email" class="form-control" id="email" name="email" value="${sessionScope.currentEditUser.email}">
         </div>
       </div>
       <div class="col-md-6">
@@ -48,13 +48,13 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="firstName">Prénom</label>
-          <input type="text" class="form-control" id="firstName" name="firstName" value="${sessionScope.user.firstName}" required>
+          <input type="text" class="form-control" id="firstName" name="firstName" value="${sessionScope.currentEditUser.firstName}" required>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label for="lastName">Nom</label>
-          <input type="text" class="form-control" id="lastName" name="lastName" value="${sessionScope.user.lastName}" required>
+          <input type="text" class="form-control" id="lastName" name="lastName" value="${sessionScope.currentEditUser.lastName}" required>
         </div>
       </div>
     </div>
@@ -63,16 +63,16 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="phone">Numéro de téléphone</label>
-          <input type="text" class="form-control" id="phone" name="phone" value="${sessionScope.user.phone}">
+          <input type="text" class="form-control" id="phone" name="phone" value="${sessionScope.currentEditUser.phone}">
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label for="gender">Genre</label>
           <select class="form-control" id="gender" name="gender">
-            <option value="Male" ${sessionScope.user.gender == 'Male' ? 'selected' : ''}>Homme</option>
-            <option value="Female" ${sessionScope.user.gender == 'Female' ? 'selected' : ''}>Femme</option>
-            <option value="Other" ${sessionScope.user.gender == 'Other' ? 'selected' : ''}>Autre</option>
+            <option value="Male" ${sessionScope.currentEditUser.gender == 'Male' ? 'selected' : ''}>Homme</option>
+            <option value="Female" ${sessionScope.currentEditUser.gender == 'Female' ? 'selected' : ''}>Femme</option>
+            <option value="Other" ${sessionScope.currentEditUser.gender == 'Other' ? 'selected' : ''}>Autre</option>
           </select>
         </div>
       </div>
@@ -94,7 +94,7 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="birthdate">Date de naissance</label>
-          <input type="date" class="form-control" id="birthdate" name="birthdate" value="${sessionScope.user.birthdate}">
+          <input type="date" class="form-control" id="birthdate" name="birthdate" value="${sessionScope.currentEditUser.birthdate}">
         </div>
       </div>
       <!-- Champs supplémentaires visibles uniquement pour les admins -->
@@ -103,9 +103,9 @@
           <div class="form-group">
             <label for="fkRole">Rôle</label>
             <select class="form-control" id="fkRole" name="fkRole">
-              <option value="1" ${sessionScope.user.fkRole.id == 1 ? 'selected' : ''}>Utilisateur</option>
-              <option value="2" ${sessionScope.user.fkRole.id == 2 ? 'selected' : ''}>Organisateur</option>
-              <option value="3" ${sessionScope.user.fkRole.id == 3 ? 'selected' : ''}>Administrateur</option>
+              <option value="1" ${sessionScope.currentEditUser.fkRole.id == 1 ? 'selected' : ''}>Utilisateur</option>
+              <option value="2" ${sessionScope.currentEditUser.fkRole.id == 2 ? 'selected' : ''}>Organisateur</option>
+              <option value="3" ${sessionScope.currentEditUser.fkRole.id == 3 ? 'selected' : ''}>Administrateur</option>
             </select>
           </div>
         </div>
@@ -117,13 +117,13 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="blacklist" name="blacklist" ${sessionScope.user.blacklist ? 'checked' : ''}>
+            <input type="checkbox" class="form-check-input" id="blacklist" name="blacklist" ${sessionScope.currentEditUser.blacklist ? 'checked' : ''}>
             <label class="form-check-label" for="blacklist">Blacklisté</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="active" name="active" ${sessionScope.user.active ? 'checked' : ''}>
+            <input type="checkbox" class="form-check-input" id="active" name="active" ${sessionScope.currentEditUser.active ? 'checked' : ''}>
             <label class="form-check-label" for="active">Actif</label>
           </div>
         </div>
@@ -137,17 +137,17 @@
   <!-- Formulaire séparé pour l'adresse -->
   <h2 class="mt-5">Modifier l'adresse</h2>
   <form action="AddressServlet" method="post">
-    <div class="row mb-5">
+    <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <label for="streetName">Rue</label>
-          <input type="text" class="form-control" id="streetName" name="streetName" value="${sessionScope.user.fkAddresse.streetName}" required>
+          <input type="text" class="form-control" id="streetName" name="streetName" value="${sessionScope.currentEditUser.fkAddresse.streetName}" required>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label for="number">Numéro</label>
-          <input type="text" class="form-control" id="number" name="number" value="${sessionScope.user.fkAddresse.number}" required>
+          <input type="text" class="form-control" id="number" name="number" value="${sessionScope.currentEditUser.fkAddresse.number}" required>
         </div>
       </div>
     </div>
@@ -156,7 +156,7 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="boxNumber">Boîte</label>
-          <input type="text" class="form-control" id="boxNumber" name="boxNumber" value="${sessionScope.user.fkAddresse.boxNumber}">
+          <input type="text" class="form-control" id="boxNumber" name="boxNumber" value="${sessionScope.currentEditUser.fkAddresse.boxNumber}">
         </div>
       </div>
       <div class="col-md-6">
@@ -165,7 +165,7 @@
           <select class="form-control locality-select" id="locality" name="locality" required>
             <option value="" disabled selected>Choisir une localité</option>
             <c:forEach var="locality" items="${localities}">
-              <option value="${locality.id}" ${sessionScope.user.fkAddresse.fkLocality.id == locality.id ? 'selected' : ''}>
+              <option value="${locality.id}" ${sessionScope.currentEditUser.fkAddresse.fkLocality.id == locality.id ? 'selected' : ''}>
                   ${locality.postalCode} - ${locality.town} (${locality.province})
               </option>
             </c:forEach>
@@ -178,24 +178,24 @@
       <div class="col-md-4">
         <div class="form-group">
           <label for="town">Ville</label>
-          <input type="text" class="form-control" id="town" name="town" value="${sessionScope.user.fkAddresse.fkLocality.town}" disabled>
+          <input type="text" class="form-control" id="town" name="town" value="${sessionScope.currentEditUser.fkAddresse.fkLocality.town}" disabled>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="province">Province</label>
-          <input type="text" class="form-control" id="province" name="province" value="${sessionScope.user.fkAddresse.fkLocality.province}" disabled>
+          <input type="text" class="form-control" id="province" name="province" value="${sessionScope.currentEditUser.fkAddresse.fkLocality.province}" disabled>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="maintown">Ville Principale</label>
-          <input type="text" class="form-control" id="maintown" name="maintown" value="${sessionScope.user.fkAddresse.fkLocality.maintown}" disabled>
+          <input type="text" class="form-control" id="maintown" name="maintown" value="${sessionScope.currentEditUser.fkAddresse.fkLocality.maintown}" disabled>
         </div>
       </div>
     </div>
 
-    <button type="submit" class="btn btn-outline-info">Mettre à jour l'adresse</button>
+    <button type="submit" class="btn btn-outline-info mb-4">Mettre à jour l'adresse</button>
   </form>
 
 </div>

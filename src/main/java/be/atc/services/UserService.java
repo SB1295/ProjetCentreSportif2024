@@ -34,5 +34,15 @@ public interface UserService {
     // Authentification de l'utilisateur
     User authenticateUser(String email, String password);
 
+    // Méthode filtre de recherche
+    List<User> filterUsers(List<User> users, String searchQuery);
+
+    // Trouver un utilisateur par Id
+    Optional<User> findById(int id);
+
+    // Supprimer un utilisateur par Id
+    void deleteById(int id);
+
+
 }
 

@@ -16,6 +16,8 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 
 
 public class UserServiceImpl implements UserService {
@@ -295,10 +297,17 @@ public class UserServiceImpl implements UserService {
         // findByEmail retourne un Optional<User>, l'attribution est donc logique dans une nouvelle variable Optional<User>
         Optional<User> userOptional = userDao.findByEmail(email);
 
-        // Vérification de l'utilisateur et du mot de passe
+        // Vérification de l'utilisateur :
         // isPresent est une méthode de Optional pour vérifier si une valeur est présente. Renvoie True / False
         if (userOptional.isPresent()) {
             User user = userOptional.get(); // get() Méthode de Optional qui retourne la valeur contenue dans Optional
+
+            // Vérification si l'utilisateur est actif
+            if (!user.getActive()) {
+                logger.warn("Échec de l'authentification : utilisateur désactivé avec l'email : " + email);
+                throw new IllegalArgumentException("USER_NOT_ACTIVE");
+            }
+            // Vérification du mot de passe
             if (checkPassword(password, user.getPassword())) {
                 logger.info("Authentification réussie pour l'utilisateur avec l'email : " + email);
                 return user;
@@ -349,4 +358,40 @@ public class UserServiceImpl implements UserService {
         logger.debug("Validation du nom de famille : " + lastName + " - Valide : " + isValid);
         return isValid;
     }
+    // Méthode filtre de recherche sur : email, lastName, firstName
+    public List<User> filterUsers(List<User> users, String searchQuery) {
+        if (searchQuery == null || searchQuery.isEmpty()) {
+            return users;
+        }
+
+        final String lowerCaseSearchQuery = searchQuery.toLowerCase();
+
+        return users.stream()
+                .filter(user -> user.getFirstName().toLowerCase().contains(lowerCaseSearchQuery) ||
+                        user.getLastName().toLowerCase().contains(lowerCaseSearchQuery) ||
+                        user.getEmail().toLowerCase().contains(lowerCaseSearchQuery))
+                .collect(Collectors.toList());
+    }
+
+    // Trouver un utilisateur par Id
+    @Override
+    public Optional<User> findById(int id) {
+        logger.debug("Recherche de l'utilisateur avec l'ID : " + id);
+        Optional<User> user = userDao.findById(id);
+        if (user.isPresent()) {
+            logger.info("Utilisateur trouvé avec l'ID : " + id);
+        } else {
+            logger.warn("Aucun utilisateur trouvé avec l'ID : " + id);
+        }
+        return user;
+    }
+
+    // Suppression d'un utilisateur par Id
+    @Override
+    public void deleteById(int id) {
+        logger.info("Suppression de l'utilisateur avec l'ID : " + id);
+        userDao.deleteById(id);
+        logger.info("Utilisateur supprimé avec succès : ID " + id);
+    }
+
 }

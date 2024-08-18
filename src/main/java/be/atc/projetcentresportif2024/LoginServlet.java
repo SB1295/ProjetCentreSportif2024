@@ -42,40 +42,52 @@ public class LoginServlet extends HttpServlet {
 
         logger.debug("Email reçu : " + email);
 
-        User user = userService.authenticateUser(email, password);
+        try {
+            User user = userService.authenticateUser(email, password);
 
-        if (user != null) {
-            logger.info("Connexion réussie pour l'utilisateur : " + email);
-            HttpSession session = request.getSession();
-            // Stockage des données de mon user avec le setAttribute permettant d'avoir accès aux données depuis n'importe quelle autre servlet ou JSP tant que la session est active.
-            session.setAttribute("user", user);
+            if (user != null) {
+                logger.info("Connexion réussie pour l'utilisateur : " + email);
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
 
-            // Logger debug, inspection de la variable session
-            logger.debug("Détails de l'utilisateur enregistré dans la session : " +
-                    "ID=" + user.getId() +
-                    ", Email=" + user.getEmail() +
-                    ", Prénom=" + user.getFirstName() +
-                    ", Nom=" + user.getLastName() +
-                    ", Date de naissance=" + user.getBirthdate() +
-                    ", Telephone=" + user.getPhone() +
-                    ", Genre=" + user.getGender() +
-                    ", Blackliste=" + user.getBlacklist() +
-                    ", Actif=" + user.getActive() +
-                    ", Role ID=" + user.getFkRole().getId() +
-                    ", Role Nom=" + user.getFkRole().getRoleName());
+                // Logger debug, inspection de la variable session
+                logger.debug("Détails de l'utilisateur enregistré dans la session : " +
+                        "ID=" + user.getId() +
+                        ", Email=" + user.getEmail() +
+                        ", Prénom=" + user.getFirstName() +
+                        ", Nom=" + user.getLastName() +
+                        ", Date de naissance=" + user.getBirthdate() +
+                        ", Telephone=" + user.getPhone() +
+                        ", Genre=" + user.getGender() +
+                        ", Blackliste=" + user.getBlacklist() +
+                        ", Actif=" + user.getActive() +
+                        ", Role ID=" + user.getFkRole().getId() +
+                        ", Role Nom=" + user.getFkRole().getRoleName());
 
-            // Loggers attributs de la session
-            logger.debug("Détails de la session après enregistrement de l'utilisateur : ");
-            logSessionAttributes(session);
+                // Loggers attributs de la session
+                logger.debug("Détails de la session après enregistrement de l'utilisateur : ");
+                logSessionAttributes(session);
 
-            // Redirige vers le dashboard si l'authentification est validée
-            response.sendRedirect(request.getContextPath() + "/DashboardServlet");
-        } else {
-            logger.warn("Échec de la connexion pour l'utilisateur : " + email);
-            request.setAttribute("loginError", "Email ou mot de passe incorrect.");
+                // Redirige vers le dashboard si l'authentification est validée
+                response.sendRedirect(request.getContextPath() + "/DashboardServlet");
+            } else {
+                logger.warn("Échec de la connexion pour l'utilisateur : " + email);
+                request.setAttribute("loginError", "Email ou mot de passe incorrect.");
+                request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+            }
+        } catch (IllegalArgumentException e) {
+            // Gestion de l'exception pour un utilisateur non actif
+            if ("USER_NOT_ACTIVE".equals(e.getMessage())) {
+                logger.warn("Échec de la connexion : utilisateur désactivé - " + email);
+                request.setAttribute("loginError", "Votre compte est désactivé. Veuillez contacter l'administrateur.");
+            } else {
+                logger.error("Erreur inattendue lors de la connexion : " + e.getMessage(), e);
+                request.setAttribute("loginError", "Une erreur inattendue est survenue. Veuillez réessayer.");
+            }
             request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
         }
     }
+
 
     private void logSessionAttributes(HttpSession session) {
         logger.debug("Session ID: " + session.getId());
