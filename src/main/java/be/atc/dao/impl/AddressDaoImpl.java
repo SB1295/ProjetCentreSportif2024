@@ -16,11 +16,13 @@ import java.util.Optional;
  */
 public class AddressDaoImpl implements AddressDao {
 
-    // Logger pour suivre les événements
     private static final Logger logger = Logger.getLogger(AddressDaoImpl.class);
 
     /**
-     * {@inheritDoc}
+     * Crée une nouvelle adresse dans la base de données.
+     *
+     * @param address L'adresse à persister.
+     * @throws RuntimeException Si une erreur survient lors de la transaction.
      */
     @Override
     public void createAddress(Address address) {
@@ -31,7 +33,6 @@ public class AddressDaoImpl implements AddressDao {
             transaction.begin();
             em.persist(address);
             transaction.commit();
-            // Logger vérification Id de l'adresse générée
             logger.info("Adresse persistée avec succès, ID généré : " + address.getId());
             logger.info("Adresse créée avec succès : " + address.getStreetName());
         } catch (Exception e) {
@@ -46,7 +47,10 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     /**
-     * {@inheritDoc}
+     * Met à jour une adresse existante dans la base de données.
+     *
+     * @param address L'adresse à mettre à jour.
+     * @throws RuntimeException Si une erreur survient lors de la transaction.
      */
     @Override
     public void updateAddress(Address address) {
@@ -70,7 +74,10 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     /**
-     * {@inheritDoc}
+     * Supprime une adresse de la base de données par son ID.
+     *
+     * @param id L'ID de l'adresse à supprimer.
+     * @throws RuntimeException Si une erreur survient lors de la transaction.
      */
     @Override
     public void deleteAddressById(int id) {
@@ -95,7 +102,11 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     /**
-     * {@inheritDoc}
+     * Recherche une adresse par son ID.
+     *
+     * @param id L'ID de l'adresse à rechercher.
+     * @return Un {@link Optional} contenant l'adresse si trouvée, sinon un {@link Optional} vide.
+     * @throws RuntimeException Si une erreur survient lors de la recherche.
      */
     @Override
     public Optional<Address> findById(int id) {
@@ -112,7 +123,10 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     /**
-     * {@inheritDoc}
+     * Récupère toutes les adresses présentes dans la base de données.
+     *
+     * @return Une liste d'adresses.
+     * @throws RuntimeException Si une erreur survient lors de la récupération.
      */
     @Override
     public List<Address> findAll() {
@@ -130,7 +144,11 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     /**
-     * {@inheritDoc}
+     * Recherche des adresses par le nom de rue.
+     *
+     * @param streetName Le nom de la rue à rechercher.
+     * @return Une liste d'adresses correspondant au nom de rue.
+     * @throws RuntimeException Si une erreur survient lors de la recherche.
      */
     @Override
     public List<Address> findByStreetName(String streetName) {
@@ -150,7 +168,11 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     /**
-     * {@inheritDoc}
+     * Recherche des adresses par l'ID de la localité.
+     *
+     * @param localityId L'ID de la localité à rechercher.
+     * @return Une liste d'adresses correspondant à la localité.
+     * @throws RuntimeException Si une erreur survient lors de la recherche.
      */
     @Override
     public List<Address> findByLocalityId(int localityId) {
