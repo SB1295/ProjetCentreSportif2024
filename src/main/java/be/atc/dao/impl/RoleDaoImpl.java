@@ -11,11 +11,20 @@ import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implémentation de l'interface {@link RoleDao} pour la gestion des entités {@link Role}.
+ */
 public class RoleDaoImpl implements RoleDao {
 
-    // Logger
+    /** Logger pour la journalisation des événements */
     private static final Logger logger = Logger.getLogger(RoleDaoImpl.class);
 
+    /**
+     * Trouve un rôle par son ID.
+     *
+     * @param id L'ID du rôle à rechercher.
+     * @return Un {@link Optional} contenant le rôle s'il est trouvé, ou vide sinon.
+     */
     @Override
     public Optional<Role> findRoleById(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -36,6 +45,11 @@ public class RoleDaoImpl implements RoleDao {
         }
     }
 
+    /**
+     * Récupère tous les rôles de la base de données.
+     *
+     * @return Une liste de tous les rôles.
+     */
     @Override
     public List<Role> findAllRoles() {
         EntityManager em = JpaUtil.getEntityManager();
@@ -51,6 +65,11 @@ public class RoleDaoImpl implements RoleDao {
         }
     }
 
+    /**
+     * Crée un nouveau rôle dans la base de données.
+     *
+     * @param role Le rôle à créer.
+     */
     @Override
     public void createRole(Role role) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -72,6 +91,11 @@ public class RoleDaoImpl implements RoleDao {
         }
     }
 
+    /**
+     * Supprime un rôle de la base de données en fonction de son ID.
+     *
+     * @param id L'ID du rôle à supprimer.
+     */
     @Override
     public void deleteRoleById(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -98,6 +122,11 @@ public class RoleDaoImpl implements RoleDao {
         }
     }
 
+    /**
+     * Met à jour un rôle existant dans la base de données.
+     *
+     * @param role Le rôle avec les informations mises à jour.
+     */
     @Override
     public void updateRole(Role role) {
         EntityManager em = JpaUtil.getEntityManager();

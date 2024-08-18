@@ -41,6 +41,18 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("INVALID_EMAIL_FORMAT");
         }
 
+        // Validation du prénom
+        if (!isValidFirstName(user.getFirstName())) {
+            logger.error("Prénom invalide : " + user.getFirstName());
+            throw new IllegalArgumentException("INVALID_FIRST_NAME");
+        }
+
+        // Validation du nom de famille
+        if (!isValidLastName(user.getLastName())) {
+            logger.error("Nom de famille invalide : " + user.getLastName());
+            throw new IllegalArgumentException("INVALID_LAST_NAME");
+        }
+
         // Vérifier si les mots de passe correspondent
         if (!user.getPassword().equals(confirmPassword)) {
             logger.error("Les mots de passe ne correspondent pas pour l'email : " + user.getEmail());

@@ -11,11 +11,17 @@ import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implémentation de l'interface {@link AddressDao} pour effectuer des opérations CRUD sur l'entité {@link Address}.
+ */
 public class AddressDaoImpl implements AddressDao {
 
     // Logger pour suivre les événements
     private static final Logger logger = Logger.getLogger(AddressDaoImpl.class);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createAddress(Address address) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -39,6 +45,9 @@ public class AddressDaoImpl implements AddressDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateAddress(Address address) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -60,6 +69,9 @@ public class AddressDaoImpl implements AddressDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAddressById(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -82,6 +94,9 @@ public class AddressDaoImpl implements AddressDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Address> findById(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -96,6 +111,9 @@ public class AddressDaoImpl implements AddressDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Address> findAll() {
         EntityManager em = JpaUtil.getEntityManager();
@@ -111,6 +129,9 @@ public class AddressDaoImpl implements AddressDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Address> findByStreetName(String streetName) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -128,6 +149,9 @@ public class AddressDaoImpl implements AddressDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Address> findByLocalityId(int localityId) {
         EntityManager em = JpaUtil.getEntityManager();

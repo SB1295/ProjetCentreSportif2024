@@ -11,11 +11,19 @@ import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implémentation de l'interface {@link UserDao}.
+ * Gère les opérations de base de données pour les entités {@link User}.
+ */
 public class UserDaoImpl implements UserDao {
 
-    // Logger
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 
+    /**
+     * Crée un nouvel utilisateur dans la base de données.
+     *
+     * @param user L'utilisateur à créer.
+     */
     @Override
     public void createUser(User user) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -37,6 +45,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Met à jour un utilisateur existant dans la base de données.
+     *
+     * @param user L'utilisateur avec les informations mises à jour.
+     */
     @Override
     public void updateUser(User user) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -58,6 +71,12 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Trouve un utilisateur par son adresse email.
+     *
+     * @param email L'email de l'utilisateur à rechercher.
+     * @return Un {@link Optional} contenant l'utilisateur si trouvé, ou vide sinon.
+     */
     @Override
     public Optional<User> findByEmail(String email) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -75,6 +94,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Récupère tous les utilisateurs dans la base de données.
+     *
+     * @return Une liste d'utilisateurs.
+     */
     @Override
     public List<User> findAll() {
         EntityManager em = JpaUtil.getEntityManager();
@@ -90,6 +114,12 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Vérifie si un utilisateur avec un email donné existe déjà dans la base de données.
+     *
+     * @param email L'email à vérifier.
+     * @return {@code true} si l'email existe, {@code false} sinon.
+     */
     @Override
     public boolean existsByEmail(String email) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -107,6 +137,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Supprime un utilisateur de la base de données en fonction de son adresse email.
+     *
+     * @param email L'email de l'utilisateur à supprimer.
+     */
     @Override
     public void deleteByEmail(String email) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -128,6 +163,13 @@ public class UserDaoImpl implements UserDao {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
     }
+
+    /**
+     * Trouve un utilisateur par son ID.
+     *
+     * @param id L'ID de l'utilisateur à rechercher.
+     * @return Un {@link Optional} contenant l'utilisateur si trouvé, ou vide sinon.
+     */
     @Override
     public Optional<User> findById(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -145,6 +187,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Supprime un utilisateur de la base de données en fonction de son ID.
+     *
+     * @param id L'ID de l'utilisateur à supprimer.
+     */
     @Override
     public void deleteById(int id) {
         EntityManager em = JpaUtil.getEntityManager();
@@ -172,7 +219,4 @@ public class UserDaoImpl implements UserDao {
             em.close();  // Ferme l'EntityManager pour libérer les ressources
         }
     }
-
-
-
 }

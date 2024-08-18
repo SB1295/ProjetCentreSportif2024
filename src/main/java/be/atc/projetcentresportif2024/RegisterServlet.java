@@ -118,6 +118,14 @@ public class RegisterServlet extends HttpServlet {
                 errorMessage = "Cet e-mail est déjà utilisé.";
                 request.setAttribute("emailError", errorMessage);
                 break;
+            case "INVALID_FIRST_NAME":
+                errorMessage = "Le prénom est invalide. Il ne doit contenir que des lettres, des espaces, des apostrophes ou des traits d'union.";
+                request.setAttribute("firstNameError", errorMessage);
+                break;
+            case "INVALID_LAST_NAME":
+                errorMessage = "Le nom de famille est invalide. Il ne doit contenir que des lettres, des espaces, des apostrophes ou des traits d'union.";
+                request.setAttribute("lastNameError", errorMessage);
+                break;
             default:
                 // Si l'erreur ne correspond à aucun des cas précédents
                 if (errorCode != null) {
