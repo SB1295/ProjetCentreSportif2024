@@ -59,6 +59,7 @@ public class AddressServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setRequestEncoding(request, response); // UFT-8
         logger.info("Entrée dans doGet de AddressServlet");
 
         HttpSession session = validateSession(request, response);
@@ -152,6 +153,7 @@ public class AddressServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setRequestEncoding(request, response); // UFT-8
         logger.info("Entrée dans doPost de AddressServlet");
 
         HttpSession session = validateSession(request, response);
@@ -272,5 +274,18 @@ public class AddressServlet extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/AddressServlet");
+    }
+
+
+    /**
+     * Définit l'encodage des requêtes et des réponses pour assurer la prise en charge de l'UTF-8.
+     *
+     * @param request  L'objet HttpServletRequest contenant la requête du client.
+     * @param response L'objet HttpServletResponse contenant la réponse envoyée au client.
+     * @throws IOException Si une erreur d'entrée/sortie survient lors de la définition de l'encodage.
+     */
+    private void setRequestEncoding(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
     }
 }

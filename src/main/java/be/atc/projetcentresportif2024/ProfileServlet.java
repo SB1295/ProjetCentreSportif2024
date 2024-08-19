@@ -42,6 +42,7 @@ public class ProfileServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        setRequestEncoding(request, response); // UFT-8
         logger.info("Entrée dans doGet de ProfileServlet");
 
         // Vérification de la session

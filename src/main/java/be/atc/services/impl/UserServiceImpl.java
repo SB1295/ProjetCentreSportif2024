@@ -9,6 +9,10 @@ import be.atc.util.ValidationUtil;
 import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+import be.atc.util.EmailUtil;
+import javax.mail.MessagingException;
+
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -54,6 +58,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(hashPassword(user.getPassword()));
         userDao.createUser(user);
         logger.info("Utilisateur créé avec succès : " + user.getEmail());
+
+        // Envoyer un e-mail de bienvenue après la création réussie de l'utilisateur
+        sendWelcomeEmailWithFallback(user.getEmail());
     }
 
     /**
@@ -490,5 +497,26 @@ public class UserServiceImpl implements UserService {
                         user.getLastName().toLowerCase().contains(lowerCaseSearchQuery) ||
                         user.getEmail().toLowerCase().contains(lowerCaseSearchQuery))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Envoie un e-mail de bienvenue à l'adresse e-mail spécifiée.
+     * <p>
+     * Cette méthode tente d'envoyer un e-mail de bienvenue à l'utilisateur après une inscription réussie.
+     * En cas d'échec (par exemple, si une exception {@link javax.mail.MessagingException} est lancée),
+     * l'erreur est capturée et un message est enregistré dans les logs. L'inscription de l'utilisateur
+     * n'est pas affectée par l'échec de l'envoi de l'e-mail.
+     * </p>
+     *
+     * @param email L'adresse e-mail de l'utilisateur à qui envoyer l'e-mail de bienvenue.
+     */
+    private void sendWelcomeEmailWithFallback(String email) {
+        try {
+            EmailUtil.sendWelcomeEmail(email);
+            logger.info("E-mail de bienvenue envoyé avec succès à : " + email);
+        } catch (MessagingException e) {
+            logger.error("Erreur lors de l'envoi de l'e-mail de bienvenue à : " + email, e);
+            // Permet des opérations de fallback, des actions supplémentaires au besoin. Ex : Alerte administrateur, logs, etc
+        }
     }
 }
