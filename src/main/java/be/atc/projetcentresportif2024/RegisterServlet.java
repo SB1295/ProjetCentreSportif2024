@@ -5,6 +5,7 @@ import be.atc.services.UserService;
 import be.atc.services.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -75,6 +76,11 @@ public class RegisterServlet extends HttpServlet {
         try {
             userService.createUser(user, confirmPassword);
             logger.info("Utilisateur créé avec succès, redirection vers la page de connexion.");
+
+            // Ajouter un message de succès dans la session lors d'une inscription réussie
+            HttpSession session = request.getSession();
+            session.setAttribute("successMessage", "Inscription réussie ! Vous pouvez maintenant vous connecter.");
+
             // Redirection vers la MainServlet avec l'action "login"
             response.sendRedirect(request.getContextPath() + "/main?action=login");
 

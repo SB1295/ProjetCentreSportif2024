@@ -67,3 +67,9 @@ html, body {
     width: 300px; /* Ajustez la taille selon vos besoins */
     height: 300px;
 }
+
+.toggle-password {
+    cursor: pointer !important;
+}
+
+

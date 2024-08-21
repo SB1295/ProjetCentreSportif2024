@@ -22,6 +22,14 @@
                 </div>
                 <div class="card-body">
 
+                    <!-- Afficher le message de succès s'il existe -->
+                    <c:if test="${not empty successMessage}">
+                        <div class="alert alert-success" role="alert">
+                                ${successMessage}
+                        </div>
+                        <c:remove var="successMessage" scope="session"/>
+                    </c:if>
+
                     <!-- Afficher les messages d'erreur -->
                     <c:if test="${not empty loginError}">
                         <div class="alert alert-danger" role="alert">
@@ -36,8 +44,16 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i toggle="#password" class="fa fa-fw fa-eye toggle-password"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
+
                         <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
                     </form>
                 </div>
@@ -48,5 +64,8 @@
         </div>
     </div>
 </div>
+
+<!-- Script passwordToggle  -->
+<script src="${pageContext.request.contextPath}/js/passwordToggle.js"></script>
 </body>
 </html>

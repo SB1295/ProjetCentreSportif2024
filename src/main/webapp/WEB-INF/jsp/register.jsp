@@ -48,7 +48,14 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i toggle="#password" class="fa fa-fw fa-eye toggle-password"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <!-- Affichage du message d'erreur pour le mot de passe -->
                             <c:if test="${not empty passwordError}">
                                 <small class="text-danger">${passwordError}</small>
@@ -56,12 +63,22 @@
                         </div>
                         <div class="form-group">
                             <label for="confirmPassword">Confirmez le mot de passe</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i toggle="#confirmPassword" class="fa fa-fw fa-eye toggle-password"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <!-- Affichage du message d'erreur pour la confirmation du mot de passe -->
                             <c:if test="${not empty confirmPasswordError}">
                                 <small class="text-danger">${confirmPasswordError}</small>
                             </c:if>
                         </div>
+
+
+
                         <!-- Affichage du message d'erreur général -->
                         <c:if test="${not empty generalError}">
                             <div class="alert alert-danger">${generalError}</div>
@@ -76,5 +93,9 @@
         </div>
     </div>
 </div>
+
+<!-- Script passwordToggle  -->
+<script src="${pageContext.request.contextPath}/js/passwordToggle.js"></script>
+
 </body>
 </html>

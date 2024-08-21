@@ -95,6 +95,13 @@ public class ProfileServlet extends HttpServlet {
             userService.updateUser(updatedUser);
             logger.debug("Mise à jour effectuée pour l'utilisateur : " + updatedUser.getId());
 
+            // Nouvelle vérification : si l'utilisateur modifié est celui connecté, mettre à jour la session
+            User currentUser = (User) session.getAttribute("user");
+            if (currentUser != null && currentUser.getId() == updatedUser.getId()) {
+                session.setAttribute("user", updatedUser);
+                logger.info("Session mise à jour pour l'utilisateur connecté : " + updatedUser.getEmail());
+            }
+
             session.setAttribute("currentEditUser", updatedUser);
             session.setAttribute("successMessage", "Profil mis à jour avec succès.");
             response.sendRedirect(request.getContextPath() + "/AddressServlet");
