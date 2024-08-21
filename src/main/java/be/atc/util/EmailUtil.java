@@ -34,7 +34,7 @@ public class EmailUtil {
     public static void sendEmail(String toAddress, String subject, String message) throws MessagingException {
         logger.info("Préparation de l'envoi de l'e-mail à : " + toAddress);
 
-        // Paramètres SMTP
+        // Paramètres SMTP. Utilisation du service Mailtrap spécialisé dans le test d'envoi d'email.
         String host = "sandbox.smtp.mailtrap.io"; // Remplacez par votre serveur SMTP
         String port = "587"; // Le port SMTP, 587 pour TLS
         final String username = "534d9f93eb673b"; // Votre adresse e-mail
