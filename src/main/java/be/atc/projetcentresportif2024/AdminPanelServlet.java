@@ -55,8 +55,13 @@ public class AdminPanelServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || !isUserAdmin(session)) {
-            logger.warn("Utilisateur non autorisé ou session invalide. Redirection vers la page de connexion.");
-            response.sendRedirect(request.getContextPath() + "/main?action=login");
+            if (session == null || session.getAttribute("user") == null) {
+                logger.warn("Aucune session valide. Redirection vers la page de connexion.");
+                response.sendRedirect(request.getContextPath() + "/main?action=login");
+            } else {
+                logger.warn("Utilisateur non autorisé. Redirection vers la page d'accueil.");
+                response.sendRedirect(request.getContextPath() + "/main?action=home"); // Redirection vers une page appropriée
+            }
             return;
         }
 
