@@ -37,8 +37,8 @@ public class EmailUtil {
         // Paramètres SMTP. Utilisation du service Mailtrap spécialisé dans le test d'envoi d'email.
         String host = "sandbox.smtp.mailtrap.io"; // Remplacez par votre serveur SMTP
         String port = "587"; // Le port SMTP, 587 pour TLS
-        final String username = "534d9f93eb673b"; // Votre adresse e-mail
-        final String password = "ac9f6629ba1024"; // Votre mot de passe
+        final String username = ""; // Votre adresse e-mail
+        final String password = ""; // Votre mot de passe
 
         // Définir les propriétés de connexion
         Properties properties = new Properties();
